@@ -6,14 +6,17 @@ ENV PYTHONUNBUFFERED=1
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 
-
 COPY ./app /app
 WORKDIR /app
 
 EXPOSE 8000
 
-
 ARG DEV=false
+
+# Install necessary dependencies for building Python packages
+RUN apk add --update --no-cache postgresql-client jpeg-dev
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+    gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev
 
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
@@ -23,6 +26,8 @@ RUN python -m venv /py && \
     fi && \
     # Clean up unnecessary files to reduce image size
     rm -rf /tmp && \
+    # Remove build dependencies to keep the image size smaller
+    apk del .tmp-build-deps && \
     adduser -D -H django-user
 
 # Add virtual environment to PATH
