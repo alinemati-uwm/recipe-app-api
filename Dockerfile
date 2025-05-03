@@ -3,7 +3,7 @@ FROM python:3.9-alpine3.13
 LABEL maintainer="nemati.ai"
 
 # Prevents Python from buffering stdout and stderr
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 # Copy requirements file to a temporary location in the image
 COPY ./requirements.txt /tmp/requirements.txt
