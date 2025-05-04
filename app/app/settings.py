@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import os
 from pathlib import Path
 # Set up environment variables
 import environ.environ as environ
@@ -80,13 +79,18 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # Debug: Print env vars
-# print("=== ENV DEBUG START ===")
-# print("POSTGRES_DATABASE_HOST:", env("POSTGRES_DATABASE_HOST", default="NOT SET"))
-# print("POSTGRES_DB_NAME:", env("POSTGRES_DB_NAME", default="NOT SET"))
-# print("POSTGRES_USER:", env("POSTGRES_USER", default="NOT SET"))
-# print("POSTGRES_PASSWORD:", env("POSTGRES_PASSWORD", default="NOT SET"))
-# print("POSTGRES_DATABASE_PORT:", env("POSTGRES_DATABASE_PORT", default="NOT SET"))
-# print("=== ENV DEBUG END ===")
+print("=== ENV DEBUG START ===")
+print("POSTGRES_DATABASE_HOST:",
+      env("POSTGRES_DATABASE_HOST", default="NOT SET"))
+print("POSTGRES_DB_NAME:",
+      env("POSTGRES_DB_NAME", default="NOT SET"))
+print("POSTGRES_USER:",
+      env("POSTGRES_USER", default="NOT SET"))
+print("POSTGRES_PASSWORD:",
+      env("POSTGRES_PASSWORD", default="NOT SET"))
+print("POSTGRES_DATABASE_PORT:",
+      env("POSTGRES_DATABASE_PORT", default="NOT SET"))
+print("=== ENV DEBUG END ===")
 
 
 try:
@@ -109,16 +113,20 @@ except environ.ImproperlyConfigured as e:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa: E501
+        'NAME': 'django.contrib.auth.password_validation.'
+                'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa: E501
+        'NAME': 'django.contrib.auth.password_validation.'
+                'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa: E501
+        'NAME': 'django.contrib.auth.password_validation.'
+                'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # noqa: E501
+        'NAME': 'django.contrib.auth.password_validation.'
+                'NumericPasswordValidator',
     },
 ]
 

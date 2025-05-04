@@ -1,5 +1,9 @@
 [flake8]
+max-line-length = 120
+
 ignore = E501
+
+
 
 
 exclude =
@@ -8,4 +12,3 @@ exclude =
     manage.py,
     settings.py,
     */settings.py,
-    ./app/settings.py
