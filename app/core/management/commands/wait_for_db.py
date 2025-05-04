@@ -1,6 +1,7 @@
 """
 Django command to wait for the database to be available.
-This command checks for the database connection and waits until it is available.
+This command checks for the database connection and waits until it is
+available.
 """
 import time
 
@@ -17,7 +18,6 @@ class Command(BaseCommand):
         self.stdout.write("Waiting for database...")
         db_up = None
         # Check if the database is available
-
         while not db_up:
             try:
                 self.check(databases=["default"])

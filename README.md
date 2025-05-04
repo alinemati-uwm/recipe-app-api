@@ -29,3 +29,15 @@ docker compose run --rm app sh -c "python manage.py test"
 ```bash
 docker compose run --rm app sh -c "python manage.py startapp core"
 ```
+
+
+# Testing the wait_for_db command and the flake8 command in docker:
+
+```bash
+ docker compose run --rm app sh -c "python manage.py test && flake8"
+```
+
+
+```bash
+docker compose run --rm app sh -c "python manage.py wait_for_db && flake8"
+```

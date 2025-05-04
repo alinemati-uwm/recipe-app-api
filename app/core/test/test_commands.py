@@ -8,6 +8,7 @@ from django.core.management import call_command
 from django.test import SimpleTestCase
 from django.db.utils import OperationalError
 
+
 class CommandTests(SimpleTestCase):
     """Test management commands."""
 
@@ -26,8 +27,6 @@ class CommandTests(SimpleTestCase):
         """Test waiting for db when getting OperationalError."""
         patched_check.side_effect = [Psycopg2OpError] * 2 + \
                                     [OperationalError] * 3 + [True]
-
         call_command("wait_for_db")
-
         self.assertEqual(patched_check.call_count, 6)
         patched_check.assert_called_with(databases=["default"])
