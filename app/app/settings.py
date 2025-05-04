@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+# Set up environment variables
+import environ.environ as environ
+
+# Initialize env
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -74,18 +79,29 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# Debug: Print env vars
+# print("=== ENV DEBUG START ===")
+# print("POSTGRES_DATABASE_HOST:", env("POSTGRES_DATABASE_HOST", default="NOT SET"))
+# print("POSTGRES_DB_NAME:", env("POSTGRES_DB_NAME", default="NOT SET"))
+# print("POSTGRES_USER:", env("POSTGRES_USER", default="NOT SET"))
+# print("POSTGRES_PASSWORD:", env("POSTGRES_PASSWORD", default="NOT SET"))
+# print("POSTGRES_DATABASE_PORT:", env("POSTGRES_DATABASE_PORT", default="NOT SET"))
+# print("=== ENV DEBUG END ===")
 
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.environ.get('DB_HOST' , 'localhost'),
-        'NAME': os.environ.get('DB_NAME', 'devdb'),
-        'USER': os.environ.get('DB_USER', 'devuser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'changeme'),
+try:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "HOST": env("POSTGRES_DATABASE_HOST"),
+            "NAME": env("POSTGRES_DB_NAME"),
+            "USER": env("POSTGRES_USER"),
+            "PASSWORD": env("POSTGRES_PASSWORD"),
+            "PORT": env("POSTGRES_DATABASE_PORT", default="5432"),
+        }
     }
-}
+except environ.ImproperlyConfigured as e:
+    raise RuntimeError(f"Database configuration error: {e}")
 
 
 # Password validation

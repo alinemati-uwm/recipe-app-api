@@ -41,3 +41,11 @@ docker compose run --rm app sh -c "python manage.py startapp core"
 ```bash
 docker compose run --rm app sh -c "python manage.py wait_for_db && flake8"
 ```
+
+
+
+ Wipe volume and restart clean:
+```bash
+docker compose down -v
+docker compose up --build
+```
