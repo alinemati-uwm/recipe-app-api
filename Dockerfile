@@ -14,12 +14,13 @@ EXPOSE 8000
 ARG DEV=false
 
 # Install necessary dependencies for building Python packages
-RUN apk add --update --no-cache postgresql-client jpeg-dev
-RUN apk add --update --no-cache --virtual .tmp-build-deps \
-    gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev
-
 RUN python -m venv /py && \
-    /py/bin/pip install --upgrade pip && \
+    # Upgrade pip to the latest version
+    /py/bin/pip install --upgrade pip && \  
+    # Install PostgreSQL client and other necessary packages
+    apk add --update --no-cache postgresql-client jpeg-dev && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        gcc libc-dev linux-headers postgresql-dev musl-dev zlib zlib-dev build-base && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = true ]; then \
         /py/bin/pip install -r /tmp/requirements.dev.txt; \
@@ -28,7 +29,11 @@ RUN python -m venv /py && \
     rm -rf /tmp && \
     # Remove build dependencies to keep the image size smaller
     apk del .tmp-build-deps && \
-    adduser -D -H django-user
+    adduser \
+        --disabled-password \
+        --no-create-home \
+        django-user
+
 
 # Add virtual environment to PATH
 ENV PATH="/py/bin:$PATH" 

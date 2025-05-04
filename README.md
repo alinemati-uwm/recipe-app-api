@@ -22,3 +22,10 @@ Ruunning the tests in docker:
 docker compose run --rm app sh -c "python manage.py test"
 ```
 
+
+
+# create a application in docker:
+
+```bash
+docker compose run --rm app sh -c "python manage.py startapp core"
+```
