@@ -2,9 +2,7 @@
 max-line-length = 120
 
 ignore = E501
-
-
-
+ignore = E128
 
 exclude =
     migrations,
@@ -12,3 +10,5 @@ exclude =
     manage.py,
     settings.py,
     */settings.py,
+    */migrations/*,
+    */__init__.py,
