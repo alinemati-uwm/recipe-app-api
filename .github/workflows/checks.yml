@@ -19,6 +19,7 @@ jobs:
           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DATABASE_PORT=${{ secrets.POSTGRES_DATABASE_PORT }}
+          DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}
           EOF
 
       - name: Login to Docker Hub
