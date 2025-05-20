@@ -9,8 +9,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-
+# The URL for creating a user in the API
 CREATE_USER_URL = reverse("user:create")
+TOKEN_URL = reverse("user:token") 
 
 
 def create_user(**params):
@@ -72,3 +73,40 @@ class PublicUserApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(res.data["email"], ["user with this email already exists."]) 
+
+    def test_create_token_for_user(self):
+        """Test generates token for valid credentials."""
+        user_details = {
+            "email": "test@example.com",
+            "password": "pw",
+        }
+        create_user(**user_details)
+        res = self.client.post(TOKEN_URL, user_details)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertIn("token", res.data)
+
+    def test_create_token_invalid_credentials(self):
+        """Test returns error if credentials invalid."""
+        create_user(email="test@example.com", password="goodpass")
+
+        payload = {
+            "email": "test@example.com",
+            "password": "badpass",
+        }
+        res = self.client.post(TOKEN_URL, payload)
+
+        self.assertNotIn("token", res.data)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+    def test_create_token_no_user(self):
+        """Test returns error if user doesn't exist."""
+        payload = {
+            "email": "test@example.com",
+            "password": "",
+        }
+        res = self.client.post(TOKEN_URL, payload)
+
+        self.assertNotIn("token", res.data)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
