@@ -1,9 +1,8 @@
 """
 Tests for the models.
 """
-
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 
 
 class ModelTests(TestCase):
@@ -28,21 +27,18 @@ class ModelTests(TestCase):
             ("TEST3@EXAMPLE.COM", "test3@example.com"),
         ]
         for email, expected in sample_emails:
-            user = get_user_model().objects.create_user(email=email,
-                                                        password='sample123')
+            user = get_user_model().objects.create_user(email=email, password="sample123")
             self.assertEqual(user.email, expected)
+
     def test_new_user_invalid_email(self):
         """Test creating user with no email raises error."""
         with self.assertRaises(ValueError):
-            get_user_model().objects.create_user(email=None, \
-                                                    password='sample123')
-            
+            get_user_model().objects.create_user(email=None, password="sample123")
+
     def test_create_superuser(self):
         """Test creating a superuser."""
-        user = get_user_model().objects.create_superuser( 
-            email="test@example.com",
-            password="testpassword123"
+        user = get_user_model().objects.create_superuser(
+            email="test@example.com", password="testpassword123"
         )
         self.assertEqual(user.is_superuser, True)
         self.assertEqual(user.is_staff, True)
-        

@@ -72,10 +72,10 @@ docker volume rm <volume_name>
 ```
 
 3. if docker volume rm <volume_name> does not work, then remove the volume with force:
-3. docker compose down 
+3. docker compose down
 
 ```bash
-docker compose down 
+docker compose down
 ```
 
 then remove the volume with force:
@@ -112,9 +112,9 @@ project_root/
 │   ├── deployment.md
 │   ├── local-development.md
 │   └── schema.yml
-├── local_db/ 
-├── locale/ 
-├── logs/ 
+├── local_db/
+├── locale/
+├── logs/
 ├── media/
 ├── project_name/
 │   ├── apps/
@@ -179,8 +179,8 @@ project_root/
 │   ├── development.txt         # Only for a development server
 │   ├── local.txt               # Only for a local server (example: docs, performance testing, etc.)
 │   ├── production.txt          # Production only
-│   └── requirements-dev.txt 
-│   └── requirements.txt 
+│   └── requirements-dev.txt
+│   └── requirements.txt
 ├── scripts/                    # Your script files
 │   └── entrypoint.sh           # Any bootstrapping necessary for your application
 ├── static/                     # Your static files
@@ -193,7 +193,7 @@ project_root/
 ├── .flake8
 ├── .gitignore                  # https://github.com/github/gitignore/blob/main/Python.gitignore
 ├── LICENSE
-├── manage.py               
+├── manage.py
 ├── Pipfile
 ├── Pipfile.lock
 ├── pyproject.toml

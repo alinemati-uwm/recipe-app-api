@@ -1,10 +1,8 @@
 """
 Database models for the application.
 """
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.contrib.auth.models import \
-    (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
 
 class UserManager(BaseUserManager):
@@ -26,6 +24,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
+
     def create_superuser(self, email, password=None, **extra_fields):
         """
         Create and return a superuser with an email and password.
@@ -41,6 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     Custom user model that supports using email instead of a username.
     """
+
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     def __str__(self):

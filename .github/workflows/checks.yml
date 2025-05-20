@@ -43,4 +43,3 @@ jobs:
           STATUS="${{ job.status }}"
           ICON="✅"
           if [ "$STATUS" = "failure" ]; then ICON="❌"; fi
-

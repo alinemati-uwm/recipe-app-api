@@ -16,7 +16,7 @@ ARG DEV=false
 # Install necessary dependencies for building Python packages
 RUN python -m venv /py && \
     # Upgrade pip to the latest version
-    /py/bin/pip install --upgrade pip && \  
+    /py/bin/pip install --upgrade pip && \
     # Install PostgreSQL client and other necessary packages
     apk add --update --no-cache postgresql-client jpeg-dev && \
     apk add --update --no-cache --virtual .tmp-build-deps \
@@ -36,7 +36,7 @@ RUN python -m venv /py && \
 
 
 # Add virtual environment to PATH
-ENV PATH="/py/bin:$PATH" 
+ENV PATH="/py/bin:$PATH"
 
 # Switch to the non-root user for security
 USER django-user
