@@ -95,6 +95,18 @@ admin: admin@exmaple.com
 password: admin123
 
 
+# How to create an application in docker:
+
+```bash
+docker compose run --rm app sh -c "python manage.py startapp <app_name>"
+```
+
+example:
+```bash
+docker compose run --rm app sh -c "python manage.py startapp user"
+```
+
+
 Django best Practice model:
 
 https://github.com/vahidrnaderi/django-project-structure
