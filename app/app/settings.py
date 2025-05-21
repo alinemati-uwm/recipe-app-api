@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",  # Custom app
-    "rest_framework",  # Django REST framework 
+    "rest_framework",  # Django REST framework
     "drf_spectacular",  # For API documentation
     "rest_framework.authtoken",
     "user",
