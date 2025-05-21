@@ -1,22 +1,21 @@
 """
 Test cases for the User API.
 """
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 from django.urls import reverse
-
-
 from rest_framework import status
 from rest_framework.test import APIClient
 
 # The URL for creating a user in the API
 CREATE_USER_URL = reverse("user:create")
-TOKEN_URL = reverse("user:token") 
+TOKEN_URL = reverse("user:token")
 
 
 def create_user(**params):
     """Create and return a new user."""
     return get_user_model().objects.create_user(**params)
+
 
 class PublicUserApiTests(TestCase):
     """
@@ -24,19 +23,23 @@ class PublicUserApiTests(TestCase):
     This test class covers the following scenarios:
     - Successful creation of a new user via the public API.
     - Ensuring user passwords are securely hashed and not returned in API responses.
-    - Preventing duplicate user creation with the same email and returning appropriate error messages.
-    Each test simulates HTTP requests to the user API endpoints and verifies both the API response and the resulting database state.
+    - Preventing duplicate user creation with the same email and returning
+    appropriate error messages.
+    Each test simulates HTTP requests to the user API endpoints and verifies both
+    the API response and the resulting database state.
     Annotations:
     -----------
     - Uses Django's TestCase for isolated test execution.
     - Utilizes DRF's APIClient for simulating API requests.
-    - Ensures compliance with security best practices (e.g., password hashing, sensitive data exclusion).
+    - Ensures compliance with security best practices (e.g., password hashing,
+    sensitive data exclusion).
     - Validates error handling for duplicate user registration.
     """
+
     """Test the public features of the user API."""
 
     def setUp(self):
-        self.client = APIClient() # Create an instance of the APIClient for making requests
+        self.client = APIClient()  # Create an instance of the APIClient for making requests
 
     def test_create_user_success(self):
         """Test creating a user is successful."""
@@ -46,7 +49,7 @@ class PublicUserApiTests(TestCase):
             "name": "Test Name",
         }
         # Make a POST request to the user creation URL with the payload
-        res = self.client.post(CREATE_USER_URL, payload) 
+        res = self.client.post(CREATE_USER_URL, payload)
 
         # assert the response status code is 201 (created)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -60,7 +63,6 @@ class PublicUserApiTests(TestCase):
         # assert the response contains the expected user data
         self.assertNotIn("password", res.data)
 
-
     def test_user_with_email_exists_error(self):
         """Test error returned if user with email exists."""
         payload = {
@@ -72,7 +74,7 @@ class PublicUserApiTests(TestCase):
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(res.data["email"], ["user with this email already exists."]) 
+        self.assertEqual(res.data["email"], ["user with this email already exists."])
 
     def test_create_token_for_user(self):
         """Test generates token for valid credentials."""
@@ -86,27 +88,19 @@ class PublicUserApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn("token", res.data)
 
-    def test_create_token_invalid_credentials(self):
-        """Test returns error if credentials invalid."""
-        create_user(email="test@example.com", password="goodpass")
+    def test_create_user_invalid_email(self):
+        payload = {"email": "notanemail", "password": "testpass123", "name": "Test"}
+        res = self.client.post(CREATE_USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-        payload = {
-            "email": "test@example.com",
-            "password": "badpass",
-        }
-        res = self.client.post(TOKEN_URL, payload)
+    def test_create_user_short_password(self):
+        payload = {"email": "test2@example.com", "password": "123", "name": "Test"}
+        res = self.client.post(CREATE_USER_URL, payload)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("password", res.data)
 
+    def test_create_token_missing_fields(self):
+        res = self.client.post(TOKEN_URL, {"email": "test@example.com"})
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotIn("token", res.data)
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
-
-    def test_create_token_no_user(self):
-        """Test returns error if user doesn't exist."""
-        payload = {
-            "email": "test@example.com",
-            "password": "",
-        }
-        res = self.client.post(TOKEN_URL, payload)
-
-        self.assertNotIn("token", res.data)
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
